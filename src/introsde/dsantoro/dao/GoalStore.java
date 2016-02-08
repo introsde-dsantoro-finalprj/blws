@@ -11,6 +11,11 @@ public class GoalStore {
 		
 	}
 	
+	public GoalStore(GoalCheck goalCheck, GoalEval goalEval) {
+		this.goalCheck = goalCheck;
+		this.goalEval = goalEval;
+	}
+	
 	public GoalStore(GoalCheck goalCheck) {
 		this.goalCheck = goalCheck;
 	}

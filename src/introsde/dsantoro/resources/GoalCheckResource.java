@@ -23,7 +23,8 @@ import javax.ws.rs.core.UriInfo;
 
 import introsde.dsantoro.dao.GoalStore;
 import introsde.dsantoro.dao.GoalStoreDao;
-import introsde.dsantoro.model.GoalCheck; 
+import introsde.dsantoro.model.GoalCheck;
+import introsde.dsantoro.model.GoalEval; 
 
 @Path("goalcheck")
 public class GoalCheckResource {
@@ -36,7 +37,8 @@ public class GoalCheckResource {
 	UriInfo uriInfo;
 	@Context
 	Request request;
-	
+	@Context
+	Response response;
 	
 	@GET
 	@Path("{goalCheckId}")	
@@ -49,7 +51,7 @@ public class GoalCheckResource {
 			return goalStore.getGoalCheck();
 		}
 		else {
-			throw new RuntimeException("GET: GoalCheck with " + goalCheckId + " not found");
+			return null;			
 		}
 	}
 	
@@ -76,12 +78,13 @@ public class GoalCheckResource {
 	@Produces({MediaType.APPLICATION_JSON})
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response insertGoalCheck(GoalCheck goalCheck) {		
-		// Insert into in-memory DB the goalCheck, giving an ID, and returning link to goalEval		
+		// Insert into in-memory DB the goalCheck, giving an ID, and calculate goalEval returning its link		
 		Long goalId = new Date().getTime();
+		GoalEval goalEval = goalCheck.evaluate();
 		goalCheck.setLink(Link.fromUri(BASE_URL + "/goaleval/" + goalId)
 				.rel("goaleval")
 				.build());
-		GoalStoreDao.INSTANCE.getDataProvider().put(goalId,new GoalStore(goalCheck));
+		GoalStoreDao.INSTANCE.getDataProvider().put(goalId,new GoalStore(goalCheck, goalEval));
 		URI createdUri = URI.create(BASE_URL + "/goalcheck/" + goalId);				  
 		return Response.created(createdUri).build();
 	}

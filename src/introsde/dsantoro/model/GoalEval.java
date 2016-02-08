@@ -9,22 +9,22 @@ public class GoalEval implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private Integer deltaCalories;
+	private Integer caloriesTaken;
 	private String evalMsg;
-	private Integer percentTaken;
+	private Double goalSatisfaction;
 	
 	
 	public GoalEval() {
 	}
 
 
-	public Integer getDeltaCalories() {
-		return deltaCalories;
+	public Integer getCaloriesTaken() {
+		return caloriesTaken;
 	}
 
 
-	public void setDeltaCalories(Integer deltaCalories) {
-		this.deltaCalories = deltaCalories;
+	public void setCaloriesTaken(Integer caloriesTaken) {
+		this.caloriesTaken = caloriesTaken;
 	}
 
 
@@ -38,12 +38,12 @@ public class GoalEval implements Serializable {
 	}
 
 
-	public Integer getPercentTaken() {
-		return percentTaken;
+	public Double getGoalSatisfaction() {
+		return goalSatisfaction;
 	}
 
 
-	public void setPercentTaken(Integer percentTaken) {
-		this.percentTaken = percentTaken;
+	public void setGoalSatisfaction(Double goalSatisfaction) {
+		this.goalSatisfaction = goalSatisfaction;
 	}
 }

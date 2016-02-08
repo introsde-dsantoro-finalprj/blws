@@ -1,14 +1,10 @@
 package introsde.dsantoro.model;
 
 import java.io.Serializable;
-import java.net.URI;
 import java.util.Collection;
+import java.util.Iterator;
 
 import javax.ws.rs.core.Link;
-
-//import org.glassfish.jersey.linking.InjectLink;
-
-import introsde.dsantoro.resources.GoalCheckResource;
 
 public class GoalCheck implements Serializable {
 //	@InjectLink(resource=GoalCheckResource.class)
@@ -57,5 +53,46 @@ public class GoalCheck implements Serializable {
 
 	public void setTodayGoal(Integer todayGoal) {
 		this.todayGoal = todayGoal;
+	}
+
+	public GoalEval evaluate() {
+		GoalEval goalEval = new GoalEval();
+		Integer sumBurned = 0;
+		Integer sumTaken = 0;
+				
+		if (calBurned != null) {
+			Iterator<Integer> i = calBurned.iterator();
+			while(i.hasNext()){
+				sumBurned += i.next();
+			}
+		}
+		
+		if (calTaken != null) {
+			Iterator<Integer> i = calTaken.iterator();
+			while(i.hasNext()){
+				sumTaken += i.next();
+			}
+		}
+		
+		Integer deltaCalories = sumTaken - sumBurned;
+		goalEval.setCaloriesTaken(deltaCalories);
+		if (deltaCalories <= todayGoal) {
+			goalEval.setEvalMsg("GOOD, You are below (or equal) you goal limit");
+		}
+		else {
+			goalEval.setEvalMsg("BAD, You are above you goal limit");
+		}
+		Double g = new Double(todayGoal);
+		Double d = 100/g;
+		Double goalTot = Math.abs(deltaCalories) * d;
+		if (goalTot <= 100) {
+			goalEval.setGoalSatisfaction(100 - goalTot);	
+		}
+		else {
+			goalEval.setGoalSatisfaction(goalTot*-1);
+		}
+		
+		
+		return goalEval;
 	}
 }
