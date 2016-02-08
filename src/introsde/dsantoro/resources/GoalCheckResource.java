@@ -1,19 +1,31 @@
 package introsde.dsantoro.resources;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Date;
+import java.util.HashMap;
+
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Link;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import introsde.dsantoro.model.GoalCheck;
+import introsde.dsantoro.dao.GoalStore;
+import introsde.dsantoro.dao.GoalStoreDao;
+import introsde.dsantoro.model.GoalCheck; 
 
 @Path("goalcheck")
 public class GoalCheckResource {
+	
+	private final String BASE_URL = "/ws/blws";
 
 	// Allows to insert contextual objects into the class,
 	// e.g. ServletContext, Request, Response, UriInfo
@@ -22,19 +34,33 @@ public class GoalCheckResource {
 	@Context
 	Request request;
 	
+	
 	@GET
-	@Path("{goalCheckId}")
-	@Produces({MediaType.TEXT_XML, MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-	public GoalCheck getGoalStatus(@PathParam("goalCheckId") String goalCheckId) {
-		// Get from in-memory db and return
-		return null;
+	@Path("{goalCheckId}")	
+	@Produces({MediaType.APPLICATION_JSON})
+	public GoalCheck getGoalStatus(@PathParam("goalCheckId") Long goalCheckId) throws URISyntaxException {
+		
+		HashMap<Long, GoalStore> map = GoalStoreDao.INSTANCE.getDataProvider();
+		GoalStore goalStore = map.get(goalCheckId);
+		if (goalStore != null) {
+			return goalStore.getGoalCheck();
+		}
+		else {
+			throw new RuntimeException("GET: GoalCheck with " + goalCheckId + " not found");
+		}
 	}
 	
 	@POST
-	@Produces({MediaType.TEXT_XML, MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-	public GoalCheck insertGoalCheck() {
-		// Insert into in-memory DB the goalCheck, giving an ID
-		// Return link to goalEval
-		return null;
+	@Produces({MediaType.APPLICATION_JSON})
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response insertGoalCheck(GoalCheck goalCheck) {		
+		// Insert into in-memory DB the goalCheck, giving an ID, and returning link to goalEval		
+		Long goalId = new Date().getTime();
+		goalCheck.setLink(Link.fromUri(BASE_URL + "/goaleval/" + goalId)
+				.rel("goaleval")
+				.build());
+		GoalStoreDao.INSTANCE.getDataProvider().put(goalId,new GoalStore(goalCheck));
+		URI createdUri = URI.create(BASE_URL + "/goalcheck/" + goalId);				  
+		return Response.created(createdUri).build();
 	}
 }

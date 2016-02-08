@@ -6,13 +6,13 @@ import java.util.Map;
 public enum GoalStoreDao {
 	INSTANCE;
 	
-	private Map<Long, GoalStore> contentProvider;
+	private HashMap<Long, GoalStore> contentProvider;
 	
-	GoalStoreDao() {
+	private GoalStoreDao() {
 		contentProvider = new HashMap<Long, GoalStore>();
 	}
 	
-	public Map<Long, GoalStore> getDataProvider() {
+	public HashMap<Long, GoalStore> getDataProvider() {
 		return contentProvider;
 	}
 	
