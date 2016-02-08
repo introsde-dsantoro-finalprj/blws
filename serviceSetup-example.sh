@@ -1,0 +1,4 @@
+#!/bin/bash
+export STORAGEWS_ENDPOINT=192.168.5.3
+export STORAGEWS_PORT=6903
+

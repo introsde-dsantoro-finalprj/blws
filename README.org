@@ -1,0 +1,20 @@
+* Deployment
+** Requirements
+
+** Instruction
+  1) Deploy on Heroku
+     #+BEGIN_EXAMPLE
+     heroku login
+     heroku create --stack cedar --buildpack https://github.com/IntroSDE/heroku-buildpack-ant.git
+     git push heroku master
+     heroku open
+     #+END_EXAMPLE
+  2) Server
+     #+BEGIN_EXAMPLE
+     ant install
+     ant start
+     #+END_EXAMPLE
+
+     
+     
+  
