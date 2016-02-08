@@ -2,8 +2,11 @@ package introsde.dsantoro.resources;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -38,7 +41,7 @@ public class GoalCheckResource {
 	@GET
 	@Path("{goalCheckId}")	
 	@Produces({MediaType.APPLICATION_JSON})
-	public GoalCheck getGoalStatus(@PathParam("goalCheckId") Long goalCheckId) throws URISyntaxException {
+	public GoalCheck getGoalCheck(@PathParam("goalCheckId") Long goalCheckId) throws URISyntaxException {
 		
 		HashMap<Long, GoalStore> map = GoalStoreDao.INSTANCE.getDataProvider();
 		GoalStore goalStore = map.get(goalCheckId);
@@ -47,6 +50,25 @@ public class GoalCheckResource {
 		}
 		else {
 			throw new RuntimeException("GET: GoalCheck with " + goalCheckId + " not found");
+		}
+	}
+	
+	@GET
+	@Produces({MediaType.APPLICATION_JSON})
+	public Collection<GoalCheck> getAllGoalCheck(@PathParam("goalCheckId") Long goalCheckId) throws URISyntaxException {
+		
+		HashMap<Long, GoalStore> map = GoalStoreDao.INSTANCE.getDataProvider();
+			
+		if (!map.isEmpty()) {
+			ArrayList<GoalCheck> goalCheckList = new ArrayList<GoalCheck>();
+			Iterator<GoalStore> i = map.values().iterator();
+			while(i.hasNext()){
+				goalCheckList.add(i.next().getGoalCheck());
+			}			
+			return goalCheckList;
+		}
+		else {
+			return null;
 		}
 	}
 	
