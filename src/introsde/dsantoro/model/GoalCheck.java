@@ -77,10 +77,10 @@ public class GoalCheck implements Serializable {
 		Integer deltaCalories = sumTaken - sumBurned;
 		goalEval.setCaloriesTaken(deltaCalories);
 		if (deltaCalories <= todayGoal) {
-			goalEval.setEvalMsg("GOOD, You are below (or equal) you goal limit");
+			goalEval.setEvalMsg("GOOD, You are below (or equal) your goal limit");
 		}
 		else {
-			goalEval.setEvalMsg("BAD, You are above you goal limit");
+			goalEval.setEvalMsg("BAD, You are above your goal limit");
 		}
 		Double g = new Double(todayGoal);
 		Double d = 100/g;
