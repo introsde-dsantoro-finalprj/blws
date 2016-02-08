@@ -17,20 +17,19 @@ public class GoalCheck implements Serializable {
 	private Collection<Integer> calBurned;
 	private Collection<Integer> calTaken;	
 	private Link link;
-	
-	public Link getLink() {
-		return link;
+	private Integer todayGoal;
+
+	public GoalCheck() {
 	}
 
 	public void setLink(Link link1) {
 		this.link = link1;
 	}
 
-	public GoalCheck() {
+	public Link getLink() {
+		return link;
 	}
 
-	private Integer todayGoal;
-	
 	public Collection<Integer> getCalBurned() {
 		return calBurned;
 	}
@@ -76,6 +75,15 @@ public class GoalCheck implements Serializable {
 		
 		Integer deltaCalories = sumTaken - sumBurned;
 		goalEval.setCaloriesTaken(deltaCalories);
+		
+		// No list of burned taken provided
+		if ( (todayGoal == 0) ){
+			goalEval.setEvalMsg("Goal not provided, cannot evaluate results.");
+			goalEval.setGoalSatisfaction(0D);
+			return goalEval;
+		}
+		
+		// 
 		if (deltaCalories <= todayGoal) {
 			goalEval.setEvalMsg("GOOD, You are below (or equal) your goal limit");
 		}
