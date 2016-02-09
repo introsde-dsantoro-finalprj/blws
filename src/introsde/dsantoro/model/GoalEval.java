@@ -1,6 +1,9 @@
 package introsde.dsantoro.model;
 
 import java.io.Serializable;
+import java.util.List;
+
+import introsde.dsantoro.dbws.Meal;
 
 public class GoalEval implements Serializable {
 
@@ -12,8 +15,19 @@ public class GoalEval implements Serializable {
 	private Integer caloriesTaken;
 	private String evalMsg;
 	private Double goalSatisfaction;
+	private List<Meal> meals;
 	
 	
+	public List<Meal> getMeals() {
+		return meals;
+	}
+
+
+	public void setMeals(List<Meal> meals) {
+		this.meals = meals;
+	}
+
+
 	public GoalEval() {
 	}
 
